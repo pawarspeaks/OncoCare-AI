@@ -7,6 +7,9 @@ import bcrypt from "bcryptjs";
 import nodemailer from "nodemailer";
 import { config } from 'dotenv';
 
+import { extractField, extractFields } from '../utils/extractUtils.js';
+import { generatePrompts } from '../utils/openaiUtils.js';
+
 config();
 // const createUser=async(req,res,next)=>{
 //     try{
@@ -290,10 +293,138 @@ const addNewPatient = async (req, res) => {
     }
 };
 
+const parseUnstructuredData = async (req, res, next) => {
+  try {
+    const unstructuredData = req.body.data; // request body - unstructured data
+
+    // Parsing logic
+    const patientId = extractField(/Patient ID: (\d+)/, unstructuredData);
+    const age = extractField(/Age: (\d+)/, unstructuredData);
+    const gender = extractField(/Gender: (Male|Female)/, unstructuredData);
+
+    const cancerType = extractField(/Cancer Type: ([^\n]+)/, unstructuredData);
+    const diagnosisDate = extractField(/Diagnosis Date: (\d{4}-\d{2}-\d{2})/, unstructuredData);
+    const gleasonScore = extractField(/Gleason Score: (\d+)/, unstructuredData);
+    const pathologicStage = extractField(/Pathologic Stage: ([^\n]+)/, unstructuredData);
+    
+    const comorbidities = extractFields(/Comorbidity: ([^\n]+)/, unstructuredData).flat(); // Adjust to flatten comorbidities
+
+    // const priorCancerHistory = extractField(/Prior Cancer History: ([^\n]+)/, unstructuredData);
+
+    const diseaseStates = [];
+    const diseaseStatePatterns = extractFields(/Disease State: ([^\n]+) Start Date: (\d{4}-\d{2}-\d{2})( End Date: (\d{4}-\d{2}-\d{2}))?/, unstructuredData);
+    diseaseStatePatterns.forEach(([state, startDate, , endDate]) => {
+      diseaseStates.push({
+        state,
+        startDate,
+        endDate: endDate || null,
+      });
+    });
+
+    const procedures = [];
+    const procedurePatterns = extractFields(/Procedure: ([^\n]+) Date: (\d{4}-\d{2}-\d{2}) Description: ([^\n]+)/, unstructuredData);
+    procedurePatterns.forEach(([type, date, description]) => {
+      procedures.push({
+        date,
+        type,
+        description,
+      });
+    });
+
+    const treatments = [];
+    const treatmentPatterns = extractFields(/Treatment: ([^\n]+) Start Date: (\d{4}-\d{2}-\d{2}) End Date: (\d{4}-\d{2}-\d{2})? Description: ([^\n]+)/, unstructuredData);
+    treatmentPatterns.forEach(([type, startDate, endDate, description]) => {
+      treatments.push({
+        type,
+        startDate,
+        endDate: endDate || null,
+        description,
+      });
+    });
+
+    const labResults = [];
+    const labPatterns = extractFields(/Lab Result: ([^\n]+) Date: (\d{4}-\d{2}-\d{2}) Value: ([^\n]+)/, unstructuredData);
+    labPatterns.forEach(([test, date, value]) => {
+      const valueDict = {};
+      if (value.includes(':')) {
+        value.split(',').forEach((v) => {
+          const [k, val] = v.split(':');
+          valueDict[k.trim()] = parseFloat(val.trim());
+        });
+      } else {
+        const numericValue = extractField(/[-+]?[.]?[\d]+(?:,\d\d\d)*[\.]?\d*(?:[eE][-+]?\d+)?/, value);
+        const unit = extractField(/[a-zA-Z/]+/, value);
+        valueDict.value = numericValue ? parseFloat(numericValue) : null;
+        valueDict.unit = unit || null;
+      }
+      labResults.push({
+        date,
+        test,
+        value: valueDict,
+      });
+    });
+
+    const imagingStudies = [];
+    const imagingPatterns = extractFields(/Imaging Study: ([^\n]+) Date: (\d{4}-\d{2}-\d{2}) Findings: ([^\n]+)/, unstructuredData);
+    imagingPatterns.forEach(([type, date, findings]) => {
+      imagingStudies.push({
+        date,
+        type,
+        findings,
+      });
+    });
+
+    const medications = [];
+    const medicationPatterns = extractFields(/Medication: ([^\n]+) Start Date: (\d{4}-\d{2}-\d{2})( End Date: (\d{4}-\d{2}-\d{2}))? Dosage: ([^\n]+)/, unstructuredData);
+    medicationPatterns.forEach(([name, startDate, , endDate, dosage]) => {
+      medications.push({
+        name,
+        startDate,
+        endDate: endDate || null,
+        dosage,
+      });
+    });
+
+    const structuredData = {
+      name: 'John Doe', // Example: Replace with extracted patient name
+      age: age ? parseInt(age, 10) : null,
+      gender: gender || null,
+      cancerType,
+      diagnosisDate,
+      gleason_score: gleasonScore ? parseInt(gleasonScore, 10) : null,
+      pathologicStage,
+      comorbidities,
+      // priorCancerHistory,
+      diseaseStates,
+      procedures,
+      treatments,
+      labResults,
+      imagingStudies,
+      medications,
+    };
+
+    res.status(200).json({ success: true, message: 'Data parsed successfully', data: structuredData });
+  } catch (error) {
+    console.error('Error parsing unstructured data:', error);
+    res.status(500).json({ success: false, message: 'Failed to parse data', error: error.message });
+  }
+};
+
+
+const generatePromptsHandler = async (req, res, next) => {
+    try {
+      const structuredData = req.body.data; // Assuming request body contains structured data
+      const prompts = await generatePrompts(structuredData);
+      res.status(200).json({ success: true, message: 'Prompts generated successfully', data: prompts });
+    } catch (error) {
+      console.error('Error generating prompts:', error);
+      next(error);
+    }
+  };  
 
 
 export {
     // createHospital,
     loginHospital,getHospitalProfile,updateHospitalProfile,checkOtp,changePassword,
     // HospitalExists,
-    logout,fetchAllPatients,sendInvitationEmailHandler, sendInvitationEmail,addNewPatient};
+    logout,fetchAllPatients,sendInvitationEmailHandler, sendInvitationEmail,addNewPatient, parseUnstructuredData, generatePromptsHandler};

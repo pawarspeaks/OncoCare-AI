@@ -1,43 +1,42 @@
-
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const diseaseStateSchema = new Schema({
   state: { type: String, required: true },
-  startDate: { type: String, required: true },
+  startDate: { type: String, required: false },
   endDate: { type: String }
 }, { _id: false });
 
 const procedureSchema = new Schema({
-  date: { type: String, required: true },
+  date: { type: String, required: false },
   type: { type: String, required: true },
-  description: { type: String, required: true }
+  description: { type: String, required: false }
 }, { _id: false });
 
 const treatmentSchema = new Schema({
   type: { type: String, required: true },
-  start_date: { type: String, required: true },
-  end_date: { type: String },
-  description: { type: String, required: true }
+  startDate: { type: String, required: false },
+  endDate: { type: String },
+  description: { type: String, required: false }
 }, { _id: false });
 
 const labResultSchema = new Schema({
-  date: { type: String, required: true },
+  date: { type: String, required: false },
   test: { type: String, required: true },
   value: { type: Schema.Types.Mixed, required: true }
 }, { _id: false });
 
 const imagingStudySchema = new Schema({
-  date: { type: String, required: true },
+  date: { type: String, required: false },
   type: { type: String, required: true },
   findings: { type: String, required: true }
 }, { _id: false });
 
 const medicationSchema = new Schema({
   name: { type: String, required: true },
-  start_date: { type: String, required: true },
-  end_date: { type: String },
-  dosage: { type: String, required: true }
+  startDate: { type: String, required: false },
+  endDate: { type: String },
+  dosage: { type: String, required: false }
 }, { _id: false });
 
 const patientDetailsSchema = new Schema({
@@ -45,13 +44,13 @@ const patientDetailsSchema = new Schema({
   age: { type: Number, required: true },
   gender: { type: String, required: true },
   cancerType: { type: String, required: true },
-  diagnosisDate: { type: String, required: true },
+  diagnosisDate: { type: String, required: false },
   gleason_score: { type: Number, required: true },
   pathologicStage: { type: String, required: true },
   comorbidities: [{ type: String, required: true }],
   diseaseStates: [diseaseStateSchema],
   procedures: [procedureSchema],
-  treatment: [treatmentSchema],
+  treatments: [treatmentSchema], // Ensure consistency in naming here
   labResults: [labResultSchema],
   imagingStudies: [imagingStudySchema],
   medications: [medicationSchema]
@@ -84,9 +83,9 @@ userSchema.pre('save', function(next) {
     });
   }
 
-  // Remove _id from nested treatment
-  if (doc.patientDetails && doc.patientDetails.treatment) {
-    doc.patientDetails.treatment.forEach(treatment => {
+  // Remove _id from nested treatments (ensure consistency in naming)
+  if (doc.patientDetails && doc.patientDetails.treatments) {
+    doc.patientDetails.treatments.forEach(treatment => {
       if (treatment._id) delete treatment._id;
     });
   }
@@ -118,7 +117,6 @@ userSchema.pre('save', function(next) {
 const User = mongoose.model('User', userSchema, 'patients'); // 'patients' is the collection name
 
 export default User;
-
 
 // import mongoose from 'mongoose';
 // import bcrypt from 'bcryptjs';
