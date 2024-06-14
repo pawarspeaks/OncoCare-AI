@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+@font-face {
+  font-family: 'Product Sans'; 
+  src: url('../../../fonts/ProductSans/ProductSans-Regular.ttf') format('woff2');
+  font-weight: 400; 
+  font-style: normal; 
+}
+
+@font-face {
+  font-family: 'Helvetica Neue'; 
+  src: url('../../../fonts/helvetica-neue-5/HelveticaNeueMedium.otf') format('woff2');
+  font-weight: 400; 
+  font-style: normal; 
+}
+
+@font-face {
+  font-family: 'segoe-ui-this'; 
+  src: url('../../../fonts/segoe-ui-this/segoeuithis.ttf') format('woff2');
+  font-weight: 400; 
+  font-style: normal; 
+}
+
+.organization-containers {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.white-boxs {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding-left: 40px;
+  padding-right: 40px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+
+
+.header h1 {
+  color: rgb(0, 150, 20) !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.103);
+  font-size: 30px;
+
+}
+
+.header h2 {
+  color: rgb(146, 139, 0) !important;
+  font-size: larger;
+}
+
+.header-id {
+  font-size: 1.2rem; 
+}
+
+.contents {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* Align buttons to the right */
+  font-family: 'segoe-ui-this'; 
+  font-size: 18px;
+  font-style: bold;
+  text-align: left; /* Ensure text inside buttons is aligned right */
+}
+
+.options a {
+  background-color: #00ae17;
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  font-style: bold;
+  color: #fff;
+  border-radius: 3px;
+  transition: background-color 0.2s ease-in-out;
+  width: 150px; /* Set a fixed width for consistency */
+  text-align: center; /* Center text inside the button */
+}
+
+.options a:visited {
+  color: rgb(255, 255, 255); 
+  
+}
+
+.options a:hover {
+  background-color: #137e00;
+}
+
+
+.hospital-image img {
+  max-width:210px;
+  height: auto;
+}
