@@ -1,5 +1,5 @@
 import express from "express";
-import {loginHospital, checkOtp, changePassword ,logout, getHospitalProfile, fetchAllPatients, sendInvitationEmailHandler, sendInvitationEmail, addNewPatient} from "../Controllers/HospitalController.js";
+import {loginHospital, checkOtp, changePassword ,logout, getHospitalProfile, fetchAllPatients, sendInvitationEmailHandler, sendInvitationEmail, addNewPatient, parseUnstructuredData, generatePromptsHandler} from "../Controllers/HospitalController.js";
 import { isAuthenticatedHospital,isVerifiedHospital } from "../Middlewares/auth.js";
 // import { sendEmail } from "../Features/sendEmail.js";
 
@@ -31,5 +31,6 @@ HospitalRouter.post('/send-invitation-email', sendInvitationEmailHandler);
 
 HospitalRouter.post('/addNewPatient',isAuthenticatedHospital, addNewPatient);
 
+HospitalRouter.post('/parse-unstructured',isAuthenticatedHospital, parseUnstructuredData);
 
 export default HospitalRouter;

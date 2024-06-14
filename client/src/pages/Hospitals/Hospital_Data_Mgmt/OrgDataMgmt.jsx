@@ -3,7 +3,6 @@ import axios from 'axios';
 import './OrgDataMgmt.css';
 import { useNavigate } from 'react-router-dom';
 
-
 const OrgDataMgmt = () => {
     const [userId, setUserId] = useState('');
     const [doctorId, setDoctorId] = useState('');
@@ -16,35 +15,31 @@ const OrgDataMgmt = () => {
     const textareaRef = useRef(null);
     const navigate = useNavigate();
 
-
-
     useEffect(() => {
         const isVerifiedHospital = async () => {
-          try {
-            // Verify user authentication and role
-            const authResponse = await axios.post('http://localhost:3001/hospitals/verified', {}, { withCredentials: true });
-            
-            if (!authResponse.data.success) {
-              setTimeout(() => {
-                alert("Please make a login to access any further details");
-                window.location.href = '/'; // Redirect to home page after user clicks "OK"
-              }, 500); // 500 milliseconds delay before showing alert
-              return;
+            try {
+                // Verify user authentication and role
+                const authResponse = await axios.post('http://localhost:3001/hospitals/verified', {}, { withCredentials: true });
+                
+                if (!authResponse.data.success) {
+                    setTimeout(() => {
+                        alert("Please make a login to access any further details");
+                        window.location.href = '/'; // Redirect to home page after user clicks "OK"
+                    }, 500); // 500 milliseconds delay before showing alert
+                    return;
+                }
+            } catch (error) {
+                console.error('Error verifying hospital:', error);
+                setTimeout(() => {
+                    alert("Please make a login to access any further details");
+                    window.location.href = '/'; // Redirect to home page after user clicks "OK"
+                }, 500); // 500 milliseconds delay before showing alert
             }
-          } catch (error) {
-            console.error('Error verifying hospital:', error);
-            setTimeout(() => {
-              alert("Please make a login to access any further details");
-              window.location.href = '/'; // Redirect to home page after user clicks "OK"
-            }, 500); // 500 milliseconds delay before showing alert
-          }
         };
     
         isVerifiedHospital();
-      }, [navigate]);
+    }, [navigate]);
 
-      
-      
     useEffect(() => {
         const fetchHospitalProfile = async () => {
             try {
@@ -76,25 +71,126 @@ const OrgDataMgmt = () => {
         }
 
         try {
-            const patient = {
-                userId,
-                email,
-                doctorId,
-                hospital_id,
-                password: generateRandomPassword(), // Generate random password
-                patientDetails: JSON.parse(message) // Parse the message as JSON
-            };
+            // Step 1: Send patientDetails to parse-unstructured API endpoint
+            const response = await axios.post('http://localhost:3001/hospitals/parse-unstructured', {
+                data: message // Send the raw message data
+            }, {
+                withCredentials: true
+            });
 
-            const response = await axios.post('http://localhost:3001/hospitals/addNewPatient', patient, {
-                withCredentials: true, 
-              });
-              console.log(response.data);
-              alert('New patient added successfully');
-            } catch (error) {
-              console.error('Error adding new patient:', error);
-              alert('Error adding new patient');
+            console.log('Parsed data response:', response.data);
+
+            // Check if the response contains valid data
+            if (response.data && response.data.data) {
+                const parsedPatientDetails = response.data.data;
+                console.log(parsedPatientDetails);
+
+                // Step 2: Construct patient object with updated patientDetails
+                const patient = {
+                    userId,
+                    email,
+                    doctorId,
+                    hospital_id,
+                    password: generateRandomPassword(), // Generate random password
+                    patientDetails: parsedPatientDetails
+                };
+
+                // Step 3: Call addNewPatient API endpoint with updated patient object
+                const addPatientResponse = await axios.post('http://localhost:3001/hospitals/addNewPatient', patient, {
+                    withCredentials: true
+                });
+
+                console.log('New patient added:', addPatientResponse.data);
+                alert('New patient added successfully');
+                setUserId('');
+                setDoctorId('');
+                setEmail('');
+                setMessage('');
+                setFile(null);
+                setFileType('');
+            } else {
+                console.error('Invalid response from parse-unstructured endpoint');
+                alert('Error parsing patient details');
             }
-          };
+        } catch (error) {
+            console.error('Error adding new patient:', error);
+            alert('Error adding new patient');
+        }
+    };
+
+    const handleFileSubmit = async () => {
+        if (!userId.trim() || !doctorId.trim() || !email.trim() || !file) {
+            alert('Please enter MRN Number, Doctor ID, Email, and select a file');
+            return;
+        }
+    
+        try {
+            // Read file content
+            const reader = new FileReader();
+            reader.readAsText(file);
+            
+            reader.onload = async (event) => {
+                const fileContent = event.target.result;
+                let parsedFileData;
+                
+                try {
+                    parsedFileData = JSON.parse(fileContent);
+                } catch (error) {
+                    console.error('Error parsing JSON file:', error);
+                    alert('Error parsing JSON file');
+                    return;
+                }
+    
+                const patientData = {
+                    userId,
+                    doctorId,
+                    email,
+                    hospital_id,
+                    password: generateRandomPassword(),
+                    fileType, // Assuming you still need this field
+                    patientDetails: parsedFileData // Include the parsed JSON content here
+                };
+    
+                try {
+                    const addPatientResponse = await axios.post('http://localhost:3001/hospitals/addNewPatient', patientData, {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        withCredentials: true
+                    });
+    
+                    console.log('New patient added with file data:', addPatientResponse.data);
+                    alert('New patient added successfully');
+                    setUserId('');
+                    setDoctorId('');
+                    setEmail('');
+                    setMessage('');
+                    setFile(null);
+                    setFileType('');
+                } catch (error) {
+                    console.error('Error adding new patient with file data:', error);
+                    alert('Error adding new patient with file data');
+                }
+            };
+    
+            reader.onerror = (error) => {
+                console.error('Error reading file:', error);
+                alert('Error reading file');
+            };
+        } catch (error) {
+            console.error('Error handling file submit:', error);
+            alert('Error handling file submit');
+        }
+    };
+    
+    const handleLogout = async () => {
+        try {
+            await axios.post('http://localhost:3001/hospitals/logout', {}, { withCredentials: true });
+            navigate('/'); // Redirect to the login page after logout
+        } catch (error) {
+            console.error('Error logging out:', error);
+        }
+    };
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
@@ -111,64 +207,64 @@ const OrgDataMgmt = () => {
         }
     };
 
-
     const handleViewPatients = () => {
         navigate('/OrgView');
     };
-    
+
+    const handleViewHomePage = () => {
+        navigate('/OrgHome');
+    };
+
     return (
         <div className="org-data-management">
-        <div className="side-panel">
-            <div className="oncocare-header">OncoCare</div>
-            <div className="hospital-name">{hospitalName}</div>
-            <div className="options">
-                <button  onClick={handleViewPatients}>View Patients</button>
-                <button>Hospital Home Page</button>
-                <button>Logout</button>
+            <div className="side-panel">
+                <div className="oncocare-header">OncoCare</div>
+                <div className="hospital-name">{hospitalName}</div>
+                <div className="options">
+                    <button onClick={handleViewPatients}>View Patients</button>
+                    <button onClick={handleViewHomePage}>Hospital Home Page</button>
+                    <button onClick={handleLogout}>Logout</button>
+                </div>
+            </div>
+            <div className="main-content">
+                <div className="patient-details">
+                    <h2>Patient Details</h2>
+                    <div className="input-group">
+                        <label>MRN Number:</label>
+                        <input type="text" value={userId} onChange={(e) => setUserId(e.target.value)} />
+                    </div>
+                    <div className="input-group">
+                        <label>Doctor ID:</label>
+                        <input type="text" value={doctorId} onChange={(e) => setDoctorId(e.target.value)} />
+                    </div>
+                    <div className="input-group">
+                        <label>Email:</label>
+                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                    </div>
+                </div>
+                <div className="chat-bot">
+                    <div className="chat-box"></div>
+                    <div className="chat-input">
+                        <textarea
+                            ref={textareaRef}
+                            value={message}
+                            onChange={handleMessageChange}
+                            placeholder="Enter Unstructured Data as Text here...."
+                            rows="1"
+                            style={{ overflow: message.split('\n').length > 7 ? 'auto' : 'hidden' }}
+                        />
+                        <button onClick={handleTextSubmit}>Upload Text Data</button>
+                    </div>
+                </div>
+                <div className="file-upload">
+                    <label>Upload File [json]:</label>
+                    <input type="file" accept=".json, .csv, .jpg, .jpeg, .png" onChange={handleFileChange} />
+                </div>
+                <div className="action-buttons">
+                    <button onClick={handleFileSubmit}>Upload File Data</button>
+                </div>
             </div>
         </div>
-        <div className="main-content">
-            <div className="patient-details">
-                <h2>Patient Details</h2>
-                <div className="input-group">
-                    <label>MRN Number:</label>
-                    <input type="text" value={userId} onChange={(e) => setUserId(e.target.value)} />
-                </div>
-                <div className="input-group">
-                    <label>Doctor ID:</label>
-                    <input type="text" value={doctorId} onChange={(e) => setDoctorId(e.target.value)} />
-                </div>
-                <div className="input-group">
-                    <label>Email:</label>
-                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                </div>
-            </div>
-            <div className="chat-bot">
-                <h2>Chat Interface</h2>
-                <div className="chat-box">
-                    {/* chat messages here */}
-                </div>
-                <div className="chat-input">
-                    <textarea
-                        ref={textareaRef}
-                        value={message}
-                        onChange={handleMessageChange}
-                        placeholder="Enter Unstructured Data as Text here...."
-                        rows="1"
-                        style={{ overflow: message.split('\n').length > 7 ? 'auto' : 'hidden' }}
-                    />
-                    <button onClick={handleTextSubmit}>Upload Text Data</button>
-                </div>
-            </div>
-            <div className="file-upload">
-                <label>Upload File:</label>
-                <input type="file" accept=".json, .csv, .jpg, .jpeg, .png" onChange={handleFileChange} />
-            </div>
-            <div className="action-buttons">
-                <button >Submit File Data</button>
-            </div>
-        </div>
-     </div>
     );
 };
 
