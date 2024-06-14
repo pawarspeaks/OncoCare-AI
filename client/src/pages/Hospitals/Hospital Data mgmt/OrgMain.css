@@ -1,0 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+@font-face {
+  font-family: 'Product Sans'; 
+  src: url('../../../fonts/ProductSans/ProductSans-Regular.ttf') format('woff2');
+  font-weight: 400; 
+  font-style: normal; 
+}
+
+@font-face {
+  font-family: 'Helvetica Neue'; 
+  src: url('../../../fonts/helvetica-neue-5/HelveticaNeueMedium.otf') format('woff2');
+  font-weight: 400; 
+  font-style: normal; 
+}
+
+@font-face {
+  font-family: 'segoe-ui-this'; 
+  src: url('../../../fonts/segoe-ui-this/segoeuithis.ttf') format('woff2');
+  font-weight: 400; 
+  font-style: normal; 
+}
+
+body, html {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+.view-patients {
+  padding: 40px;
+  font-family: 'Product Sans', Arial, sans-serif;
+  color: black !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.white-box {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  padding-top: 0px;
+  text-align: center;
+  width: 80%;
+  max-height: 80%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: rgb(0, 150, 20) !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 30px;
+}
+
+.table-container {
+  overflow-y: auto;
+  flex: 1;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+thead {
+  background-color: #0d6c1b !important;
+  color: #fff; /* Pale yellow color for the heading entries */
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+tbody {
+  display: block;
+  max-height: 300px; /* Adjust as needed */
+  overflow-y: auto;
+  width: 100%;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #e5ffb8;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #c5fec2;
+}
+
+tbody tr:hover {
+  background-color: #ffffff;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #dddddd;
+  display: table-cell;
+  width: 16.66%; /* Adjust based on the number of columns */
+}
+
+input[type="email"] {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+input::placeholder {
+  color: #d1d1d1; /* Light gray placeholder text */
+  opacity: 1; 
+}
+
+input[type="email"]:focus {
+  border-color: #ffd700; /* Yellow border on focus */
+}
+
+.invite-button {
+  background-color: #34be24;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-family: 'segoe-ui-this';
+  font-size: 16px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.invite-button:hover {
+  background-color: #197708;
+}
+

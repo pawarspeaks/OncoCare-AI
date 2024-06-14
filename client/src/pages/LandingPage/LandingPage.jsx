@@ -1,28 +1,40 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './LandingPage.css';
+import mainImage from '../../assets/bg.png'; // Import the image
 
 function LandingPage() {
-  const location = useLocation();
-
   return (
-    <div className="App">
-      {location.pathname === '/' && (
-        <>
-          <nav className="navbar">
-            <div className="nav-right">
-              <Link to="/AdminLogin">Admin</Link>
-              <Link to="/OrgLogin">Hospital Login</Link>
-              <Link to="/UserLogin">User Login</Link>
-              <Link to="/about">About OncoCare</Link>
-            </div>
-          </nav>
-          <div className="content">
-            <h1>OncoCare</h1>
-            <p><i>Welcome to OncoCare, your trusted partner in cancer care.</i></p>
-          </div>
-        </>
-      )}
+    <div className="containers">
+      <div className="sidebar">
+        <h2>Menu</h2>
+        <ul className="nav flex-column">
+          <li className="nav-item">
+            <Link className="nav-link" to="/">Home</Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/AdminLogin">Admin</Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/OrgLogin">Hospital Login</Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/UserLogin">User Login</Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/about">About OncoCare</Link>
+          </li>
+        </ul>
+      </div>
+      <div className="content">
+        <div className="content-text">
+          <h1>OncoCare</h1>
+          <p><i>Welcome to OncoCare, your trusted partner in cancer care.</i></p>
+        </div>
+        <div className="content-image">
+          <img src={mainImage} alt="OncoCare" />
+        </div>
+      </div>
     </div>
   );
 }

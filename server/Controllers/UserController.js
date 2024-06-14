@@ -2,8 +2,9 @@ import { createUserCookie, deleteUserCookie, generateToken, milliSecToMinute, mi
 import User from "../Models/UserModel.js";
 import Otp from "../Models/otpModel.js";
 import { FAILED_STATUS, NOT_FOUND_CODE, SERVER_ERR_CODE, SERVER_ERR_MSG, SUCCESS_CODE, SUCCESS_STATUS, WRONG_CODE } from "../data/Statuses.js";
+import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-
+import { config } from 'dotenv';
 // const createUser=async(req,res,next)=>{
 //     try{
 //         const {name,email,password,twitter_handle}=req.body;
@@ -79,24 +80,19 @@ const loginUser = async (req, res, next) => {
     }
 };
 
-
-
-const getUserProfile=async(req,res)=>{
-    try{
-        const user=await User.findById(req.userId).select("-password");
-
-        if(!user){
+const getUserProfile = async (req, res) => {
+    try {
+        const user = await User.findById(req.userId).select("-password");
+        if (!user) {
             deleteUserCookie(res);
-            
-            return res.status(NOT_FOUND_CODE).send({success:FAILED_STATUS,message:"User Not Found"});
-        } 
+            return res.status(NOT_FOUND_CODE).send({ success: FAILED_STATUS, message: "User Not Found" });
+        }
+        res.status(SUCCESS_CODE).send({ success: SUCCESS_STATUS, message: "Cookie Found", user: user });
+    } catch (error) {
+        res.status(SERVER_ERR_CODE).send({ success: FAILED_STATUS, message: SERVER_ERR_MSG, error: error.message });
+    }
+};
 
-        res.status(SUCCESS_CODE).send({success:SUCCESS_STATUS,message:"Cookie Found",user:user})
-    }
-    catch(error){
-        res.status(SERVER_ERR_CODE).send({success:FAILED_STATUS,message:SERVER_ERR_MSG,error:error.message});
-    }
-}
 
 
 const updateUserProfile=async(req,res)=>{
@@ -204,10 +200,45 @@ const logout=async(req,res)=>{
     }
 }
 
+const sendMessage = async (req, res) => {
+    try {
+        const userId = req.params.userId; // Extract user ID from request parameters
+        const message = `Hello, User ${userId}!`; // Construct the message using the user ID
+        res.status(200).json({ message }); // Send the message as JSON response
+    } catch (error) {
+        res.status(500).json({ error: error.message }); // Handle errors
+    }
+};
 
+const verifyAdminToken = async (req, res, next) => {
+    try {
+        const token = req.cookies[process.env.COOKIE_NAME];
 
+        if (!token) {
+            return res.status(401).json({ success: false, message: "Not authenticated" });
+        }
 
+        jwt.verify(token, process.env.JWT_SECRET, (error, decoded) => {
+            if (error || !decoded.isAdmin) {
+                return res.status(401).json({ success: false, message: "Unauthorized access" });
+            } else {
+                req.userId = decoded._id; // Assuming your admin token also contains user ID
+                next();
+            }
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Server error", error: error.message });
+    }
+};
 
 export {
-    // createUser
-    loginUser,getUserProfile,updateUserProfile,checkOtp,changePassword,userExists,logout};
+    loginUser,
+    getUserProfile,
+    updateUserProfile,
+    userExists,
+    checkOtp,
+    changePassword,
+    logout,
+    sendMessage,
+    verifyAdminToken
+};
