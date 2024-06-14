@@ -1,12 +1,13 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import OrgLogin from './pages/Hospitals/Hospital_Login/OrgLogin';
 import AdminLogin from './pages/Admin/Admin_login/AdminLogin';
 import LandingPage from './pages/LandingPage/LandingPage';
 import UserLogin from './pages/Users/User_Login/UserLogin';
-import OrgView from './pages/Hospitals//Hospital_View_Patients/OrgView';
+import OrgMain from './pages/Hospitals/Hospital Data mgmt/OrgMain';
 import OrgHome from './pages/Hospitals/Hospital_Home/OrgHome';
-import OrgDataMgmt from './pages/Hospitals/Hospital_Data_Mgmt/OrgDataMgmt';
+import AdminDashboard from './pages/Admin/Admin_Dashboard/AdminDashboard';
+import UserMain from './pages/Users/Users_Main/UserMain'; // Import UserMain
 
 import './App.css';
 
@@ -19,7 +20,6 @@ function App() {
 }
 
 function Main() {
-
   return (
     <div className="App">
       <Routes>
@@ -27,10 +27,10 @@ function Main() {
         <Route path="/OrgLogin" element={<OrgLogin />} />
         <Route path="/AdminLogin" element={<AdminLogin />} />
         <Route path="/UserLogin" element={<UserLogin />} />
-        <Route path="/OrgView" element={<OrgView />} />
+        <Route path="/OrgMain" element={<OrgMain />} />
         <Route path="/OrgHome" element={<OrgHome />} />
-        <Route path="/OrgDataMgmt" element={<OrgDataMgmt />} />
-
+        <Route path="/AdminDashboard" element={<AdminDashboard />} />
+        <Route path="/UserMain" element={<UserMain />} /> {/* Add this line */}
       </Routes>
     </div>
   );

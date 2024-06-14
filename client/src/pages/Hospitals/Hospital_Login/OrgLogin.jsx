@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './OrgLogin.css';
+import loginImage from '../../../assets/login.png';
 
 const OrgLogin = () => {
   const [hospital_id, setHospitalId] = useState('');
@@ -18,11 +19,10 @@ const OrgLogin = () => {
         hospital_id,
         password,
       }, {
-        withCredentials: true, // This line adds the withCredentials option
+        withCredentials: true,
       });
-    
+
       if (response.data && response.data.success) {
-        // Redirect user to main page after successful login
         navigate('/OrgHome');
       } else {
         setError('Invalid hospital ID or password');
@@ -30,41 +30,44 @@ const OrgLogin = () => {
     } catch (error) {
       console.error('Login failed:', error.response?.data?.message || 'Unknown error');
       setError('Invalid hospital ID or password');
-    }    
+    }
   };
 
   return (
     <div className="logincard">
       <h1>OncoCare</h1>
       <p>Login to access your hospital dashboard</p>
-
-      <form onSubmit={handleSubmit}>
-        <div className="loginContainer">
-          <span>Login</span>
+      <div className="loginContent">
+        <div className="imageContainer">
+          <img src={loginImage} alt="Login" className="loginImage" />
         </div>
-        <label htmlFor="hospital_id">Hospital ID</label>
-        <input
-          type="text"
-          id="hospital_id"
-          name="hospital_id"
-          placeholder="Enter your hospital ID"
-          required
-          value={hospital_id}
-          onChange={(e) => setHospitalId(e.target.value)}
-        />
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          placeholder="Enter your password"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="submit">Login</button>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-      </form>
+        <form onSubmit={handleSubmit} className="loginForm">
+          <div className="formContainer">
+            <label htmlFor="hospital_id">Hospital ID</label>
+            <input
+              type="text"
+              id="hospital_id"
+              name="hospital_id"
+              placeholder="Enter your hospital ID"
+              required
+              value={hospital_id}
+              onChange={(e) => setHospitalId(e.target.value)}
+            />
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Enter your password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <button type="submit">Login</button>
+            {error && <p className="error">{error}</p>}
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
