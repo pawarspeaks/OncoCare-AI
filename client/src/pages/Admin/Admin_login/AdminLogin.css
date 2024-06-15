@@ -1,78 +1,98 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
-
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900&display=swap');
 
 @font-face {
-  font-family: 'Product Sans'; 
+  font-family: 'Product Sans';
   src: url('../../../fonts/ProductSans/ProductSans-Regular.ttf') format('woff2');
-  font-weight: 400; 
-  font-style: normal; 
+  font-weight: 400;
+  font-style: normal;
 }
 
 @font-face {
-  font-family: 'Helvetica Neue'; 
+  font-family: 'Helvetica Neue';
   src: url('../../../fonts/helvetica-neue-5/HelveticaNeueMedium.otf') format('woff2');
-  font-weight: 400; 
-  font-style: normal; 
+  font-weight: 400;
+  font-style: normal;
 }
 
 @font-face {
-  font-family: 'segoe-ui-this'; 
+  font-family: 'segoe-ui-this';
   src: url('../../../fonts/segoe-ui-this/segoeuithis.ttf') format('woff2');
-  font-weight: 400; 
-  font-style: normal; 
+  font-weight: 400;
+  font-style: normal;
 }
 
 body {
   margin: 0;
   padding: 0;
-  background: white !important;  /* fallback for old browsers */
+  background: white !important;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-
-/* OrgLogin.css */
 
 .logincard {
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 30px;
-  max-width: 400px;
+  max-width: 1200px !important;
+  height: auto;
   margin: 0 auto;
-  font-family: 'Helvetica Neue'; 
+  font-family: 'Helvetica Neue', sans-serif;
   text-align: center;
 }
 
 .logincard h1 {
-  color: #333;
+  color: #009f1b !important;
   margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .logincard p {
-  color: #666;
-  margin-bottom: 30px;
+  color: #c1c79e !important;
+  margin-bottom: 15px !important;
+  font-weight: 100px !important;
 }
 
-.loginContainer {
-  background-color: #f5f5f5;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 20px;
+.loginContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.loginContainer span {
-  font-weight: bold;
-  color: #333;
+.loginForm {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.imageContainer {
+  margin-right: 20px;
+}
+
+.loginImage {
+  width: 200px;
+  height: auto;
+  border-radius: 4px;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  padding: 2vh;
+  box-sizing: border-box;
 }
 
 .logincard label {
   display: block;
   text-align: left;
-  color: #333;
+  color: #7abb40 !important;
   margin-bottom: 5px;
+  width: 100%;
 }
 
 .logincard input {
@@ -84,7 +104,7 @@ body {
 }
 
 .logincard button {
-  background-color: #007bff;
+  background-color: #00ff2f !important;
   color: #fff;
   border: none;
   padding: 10px 20px;
@@ -94,10 +114,30 @@ body {
 }
 
 .logincard button:hover {
-  background-color: #0056b3;
+  background-color: #00b30c !important;
 }
 
 .logincard p.error {
   color: #ff0000;
   margin-top: 10px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  height: 80%;
+  box-sizing: border-box;
+}
+
+.form-group {
+  margin-bottom: 2vh;
+  box-sizing: border-box;
+}
+
+.formContainer :focus,
+.tab:focus {
+  outline: none;
+  outline: 2px solid #6ff97a;
+  border: none;
+  background-color: #fff !important;
 }

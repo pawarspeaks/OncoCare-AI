@@ -1,71 +1,108 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
-
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
-
 @font-face {
-  font-family: 'Product Sans'; 
+  font-family: 'Product Sans';
   src: url('../../../fonts/ProductSans/ProductSans-Regular.ttf') format('woff2');
-  font-weight: 400; 
-  font-style: normal; 
+  font-weight: 400;
+  font-style: normal;
 }
 
 @font-face {
-  font-family: 'Helvetica Neue'; 
+  font-family: 'Helvetica Neue';
   src: url('../../../fonts/helvetica-neue-5/HelveticaNeueMedium.otf') format('woff2');
-  font-weight: 400; 
-  font-style: normal; 
+  font-weight: 400;
+  font-style: normal;
 }
 
 @font-face {
-  font-family: 'segoe-ui-this'; 
+  font-family: 'segoe-ui-this';
   src: url('../../../fonts/segoe-ui-this/segoeuithis.ttf') format('woff2');
-  font-weight: 400; 
-  font-style: normal; 
+  font-weight: 400;
+  font-style: normal;
 }
 
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  height: 100vh;
+}
+
+.View-Page {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+.side-panel {
+  width: 20%;
+  background-color: #05aa31;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh; /* Set the height to 100% of the viewport height */
+}
+
+.side-panel button {
+  background-color: #ececec !important;
+  color: black !important;
+}
+
+.side-panel button:hover {
+  background-color: #a0a0a0 !important;
+}
 
 .view-patients {
-    padding: 20px;
-    font-family: Arial, sans-serif;
-    color: black !important
-  }
-  
-  h1 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  thead {
-    background-color: #f2f2f2;
-  }
-  
-  th, td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-  
-  tr:hover {
-    background-color: #c0c0c0;
-  }
-  
-  .highlight {
-    background-color: #ffffcc; /* Light yellow */
-  }
-  
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  color: black !important;
+  width: 80%;
+  margin: 0 0; /* Center the content horizontally */
+}
 
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
 
-  
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background-color: #f2f2f2;
+  color: #05aa31;
+}
+
+th,
+td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tr:hover {
+  background-color: #c0c0c0;
+}
+
+.highlight {
+  background-color: #ffffcc; /* Light yellow */
+}
+
+td input {
+  background-color: black;
+  color: white;
+  width: 220px;
+  font-size: 18px;
+}
+
 .logout-container {
   position: absolute;
   top: 10px;
@@ -89,5 +126,3 @@
 .logout-button:hover {
   background-color: #d32f2f; /* Darker red */
 }
-
-

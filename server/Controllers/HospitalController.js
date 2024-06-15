@@ -423,8 +423,23 @@ const generatePromptsHandler = async (req, res, next) => {
   };  
 
 
+  const fetchAllHospitals = async (req, res) => {
+    try {
+        const hospitals = await Hospital.find();
+        res.status(200).json({
+            success: true,
+            hospitals,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
 export {
     // createHospital,
     loginHospital,getHospitalProfile,updateHospitalProfile,checkOtp,changePassword,
     // HospitalExists,
-    logout,fetchAllPatients,sendInvitationEmailHandler, sendInvitationEmail,addNewPatient, parseUnstructuredData, generatePromptsHandler};
+    logout,fetchAllPatients,sendInvitationEmailHandler, sendInvitationEmail,addNewPatient, parseUnstructuredData, generatePromptsHandler,fetchAllHospitals};

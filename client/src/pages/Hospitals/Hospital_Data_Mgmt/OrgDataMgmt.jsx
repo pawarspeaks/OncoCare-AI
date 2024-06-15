@@ -215,6 +215,15 @@ const OrgDataMgmt = () => {
         navigate('/OrgHome');
     };
 
+    
+    const OpenStructuredDataLink = () => {
+        window.open('https://unstructure-to-structure.streamlit.app/', '_blank', 'noopener noreferrer');
+      };
+
+      const OpenExampleUnstructuredData = () => {
+        window.open('https://drive.google.com/file/d/1YqWcwzZ2Lch6crmq_E9VKHZp0KFLtKUV/view?usp=sharing', '_blank', 'noopener noreferrer');
+      };
+
     return (
         <div className="org-data-management">
             <div className="side-panel">
@@ -231,15 +240,21 @@ const OrgDataMgmt = () => {
                     <h2>Patient Details</h2>
                     <div className="input-group">
                         <label>MRN Number:</label>
-                        <input type="text" value={userId} onChange={(e) => setUserId(e.target.value)} />
+                        <input type="text"                             
+                        placeholder="Enter patient number here...."
+                        value={userId} onChange={(e) => setUserId(e.target.value)} />
                     </div>
                     <div className="input-group">
                         <label>Doctor ID:</label>
-                        <input type="text" value={doctorId} onChange={(e) => setDoctorId(e.target.value)} />
+                        <input type="text"
+                        placeholder="Enter doctor id here...."
+                        value={doctorId} onChange={(e) => setDoctorId(e.target.value)} />
                     </div>
                     <div className="input-group">
                         <label>Email:</label>
-                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                        <input type="email"
+                        placeholder="Enter patient email here...."
+                        value={email} onChange={(e) => setEmail(e.target.value)} />
                     </div>
                 </div>
                 <div className="chat-bot">
@@ -255,6 +270,10 @@ const OrgDataMgmt = () => {
                         />
                         <button onClick={handleTextSubmit}>Upload Text Data</button>
                     </div>
+
+                    <a onClick={OpenExampleUnstructuredData}>Example of Unstructured Data for above input</a>
+                    <a onClick={OpenStructuredDataLink}>Link to Structure</a>
+
                 </div>
                 <div className="file-upload">
                     <label>Upload File [json]:</label>

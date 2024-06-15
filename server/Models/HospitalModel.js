@@ -10,9 +10,13 @@ const HospitalSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  hospital_name: {
+    type: String,
+    required: false,
+  },
   verified_otp_time:{
     type:Number,
-    required:true
+    required:false
 }
 }); 
 

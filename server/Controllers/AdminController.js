@@ -1,8 +1,10 @@
 import { createAdminCookie, deleteAdminCookie, generateToken, milliSecToMinute, minuteToMilliSec } from "../Features/feature.js";
 import Admin from "../Models/AdminModel.js";
+import User from "../Models/UserModel.js";
+import Hospital from "../Models/HospitalModel.js";
 import Otp from "../Models/otpModel.js";
 import { FAILED_STATUS, NOT_FOUND_CODE, SERVER_ERR_CODE, SERVER_ERR_MSG, SUCCESS_CODE, SUCCESS_STATUS, WRONG_CODE } from "../data/Statuses.js";
-import bcrypt from "bcryptjs";
+// import bcrypt from "bcryptjs";
 
 // const createUser=async(req,res,next)=>{
 //     try{
@@ -50,10 +52,10 @@ const loginAdmin=async(req,res,next)=>{
         const passMatch = password === admin.password;
 
         if(!passMatch) return res.status(WRONG_CODE).send({success:false,message:"Wrong Credentials (pass did not match)"}); 
-
         const token=generateToken(admin._id);
 
         createAdminCookie(res,token);
+        console.log("Cookie token was created!")
 
         res.status(SUCCESS_CODE).send({
             success:SUCCESS_STATUS,
@@ -86,36 +88,6 @@ const getUserProfile=async(req,res)=>{
     }
 }
 
-
-const updateUserProfile=async(req,res)=>{
-    try{
-        const user=await User.findById(req.userId);
-    
-        if(!user){
-            deleteAdminCookie(res);
-    
-            return res.status(NOT_FOUND_CODE).send({success:FAILED_STATUS,message:"Account Not Found"});
-        } 
-    
-        const {name,email,password,context,twitter_handle}=req.body;
-    
-        user.name=name || user.name;
-        user.email=email || user.email;
-        user.password=password || user.password;
-  
-        const updateUser=await user.save();
-    
-        res.status(SUCCESS_CODE).send({success:SUCCESS_STATUS,message:"Updated User Profile",details:{
-            _id:updateUser._id,
-            name:updateUser.name,
-            email:updateUser.email,
-
-        }});
-    }
-    catch(error){
-        res.status(SERVER_ERR_CODE).send({success:FAILED_STATUS,message:SERVER_ERR_MSG,error:error.message});
-    }
-}
 
 const userExists=async(req,res)=>{
     try{
@@ -192,6 +164,131 @@ const logout=async(req,res)=>{
     }
 }
 
+
+
+
+const fetchAllPatients = async (req, res) => {
+    try {
+        const patients = await User.find({}); // Adjust this query as per your schema
+
+        if (!patients) {
+            return res.status(NOT_FOUND_CODE).send({ success: FAILED_STATUS, message: "No patients found" });
+        }
+
+        // Map patients data as needed
+        const mappedPatients = patients.map(patient => ({
+            _id: patient._id,
+            name: patient.patientDetails.name,
+            email: patient.email,
+            userId: patient.userId,
+            age: patient.patientDetails.age,
+            hospital_id: patient.hospital_id,
+            gender: patient.patientDetails.gender
+            // Add other fields as needed
+        }));
+
+        res.status(SUCCESS_CODE).send({ success: SUCCESS_STATUS, message: "Patients retrieved successfully", patients: mappedPatients });
+    } catch (error) {
+        console.error("Error fetching patients:", error);
+        res.status(SERVER_ERR_CODE).send({ success: FAILED_STATUS, message: SERVER_ERR_MSG, error: error.message });
+    }
+};
+
+const updateUserProfile = async (req, res) => {
+    try {
+        // Extract userId from the request body
+        const { userId, email, password, doctorId, hospital_id, patientDetails } = req.body;
+        
+        // Find the user by userId
+        const user = await User.findOne({ userId });
+        
+        if (!user) {
+            return res.status(NOT_FOUND_CODE).send({ success: FAILED_STATUS, message: "Account Not Found" });
+        }
+        
+        // Update the user fields if they are provided in the request
+        user.email = email || user.email;
+        user.password = password || user.password;
+        user.doctorId = doctorId || user.doctorId;
+        user.hospital_id = hospital_id || user.hospital_id;
+        
+        // Update patient details if provided in the request
+        if (patientDetails) {
+            user.patientDetails = {
+                ...user.patientDetails, // Keep existing details
+                ...patientDetails, // Override with new details
+                comorbidities: patientDetails.comorbidities || user.patientDetails.comorbidities,
+                diseaseStates: patientDetails.diseaseStates || user.patientDetails.diseaseStates,
+                procedures: patientDetails.procedures || user.patientDetails.procedures,
+                treatments: patientDetails.treatments || user.patientDetails.treatments,
+                labResults: patientDetails.labResults || user.patientDetails.labResults,
+                imagingStudies: patientDetails.imagingStudies || user.patientDetails.imagingStudies,
+                medications: patientDetails.medications || user.patientDetails.medications,
+            };
+        }
+        
+        // Save the updated user
+        const updatedUser = await user.save();
+        
+        // Send the response with updated user details
+        res.status(SUCCESS_CODE).send({
+            success: SUCCESS_STATUS,
+            message: "Updated User Profile",
+            details: {
+                _id: updatedUser._id,
+                userId: updatedUser.userId,
+                email: updatedUser.email,
+                doctorId: updatedUser.doctorId,
+                hospital_id: updatedUser.hospital_id,
+                patientDetails: updatedUser.patientDetails,
+            },
+        });
+    } catch (error) {
+        res.status(SERVER_ERR_CODE).send({ success: FAILED_STATUS, message: SERVER_ERR_MSG, error: error.message });
+    }
+};
+
+const updateHospitalProfile = async (req, res) => {
+    try {
+        // Extract hospital_id from the request body
+        const { hospital_id, hospital_name, password } = req.body;
+        console.log('Request received:', { hospital_id, hospital_name, password });
+
+        // Check if the payload is correct
+        if (!hospital_id || !hospital_name || !password) {
+            return res.status(400).send({ success: false, message: "Invalid request payload" });
+        }
+
+        // Find the hospital by hospital_id and update its fields
+        const updatedHospital = await Hospital.findOneAndUpdate(
+            { hospital_id },
+            { $set: { hospital_name, password } },
+            { new: true, useFindAndModify: false } // Return the updated document
+        );
+
+        console.log('Hospital updated:', updatedHospital);
+
+        if (!updatedHospital) {
+            return res.status(NOT_FOUND_CODE).send({ success: FAILED_STATUS, message: "Hospital Not Found" });
+        }
+
+        res.status(SUCCESS_CODE).send({
+            success: SUCCESS_STATUS,
+            message: "Updated Hospital Profile",
+            details: {
+                _id: updatedHospital._id,
+                hospital_id: updatedHospital.hospital_id,
+                hospital_name: updatedHospital.hospital_name,
+                password: updatedHospital.password,
+            },
+        });
+    } catch (error) {
+        console.log('Error:', error.message);
+        res.status(SERVER_ERR_CODE).send({ success: FAILED_STATUS, message: SERVER_ERR_MSG, error: error.message });
+    }
+};
+
+
 export {
     // createUser,
-    loginAdmin,getUserProfile,updateUserProfile,checkOtp,changePassword,userExists,logout};
+    loginAdmin,getUserProfile,updateUserProfile,checkOtp,changePassword,userExists,logout,fetchAllPatients,updateHospitalProfile};

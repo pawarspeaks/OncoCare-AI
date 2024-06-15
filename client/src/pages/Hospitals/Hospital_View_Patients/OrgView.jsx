@@ -8,6 +8,7 @@ const OrgView = ({ hospital_id }) => {
     const [hospitalId, setHospitalId] = useState(null);
     const [emails, setEmails] = useState({});
     const navigate = useNavigate(); 
+    const [hospitalName, setHospitalName] = useState('');
 
     useEffect(() => {
         const isVerifiedHospital = async () => {
@@ -41,6 +42,7 @@ const OrgView = ({ hospital_id }) => {
             try {
                 const profileresponse = await axios.get('http://localhost:3001/hospitals/profile', { withCredentials: true });
                 setHospitalId(profileresponse.data.hospital.hospital_id); // Set hospitalId with the actual ID
+                setHospitalName(profileresponse.data.hospital.hospital_name);
             } catch (error) {
                 console.error('Error fetching hospital profile:', error);
             }
@@ -50,6 +52,8 @@ const OrgView = ({ hospital_id }) => {
             fetchHospitalProfile();
         }, 500); // 500 milliseconds delay before fetching hospital profile
     }, []);
+
+
 
     useEffect(() => {
         const fetchPatients = async () => {
@@ -116,12 +120,27 @@ const OrgView = ({ hospital_id }) => {
         console.error('Error logging out:', error);
       }
     };
+    const handleAddPatients = () => {
+        navigate('/OrgDataMgmt');
+    };
 
+    const handleViewHomePage = () => {
+        navigate('/OrgHome');
+    };
 
     return (
+        <div className="View-Page">
+        <div className="side-panel">
+        <div className="oncocare-header">OncoCare</div>
+        <div className="hospital-name">{hospitalName}</div>
+        <div className="options">
+            <button onClick={handleAddPatients}>View Patients</button>
+            <button onClick={handleViewHomePage}>Hospital Home Page</button>
+            <button onClick={handleLogout}>Logout</button>
+        </div>
+    </div>  
         <div className="view-patients">
              <div className="logout-container">
-          <button onClick={handleLogout} className="logout-button">Logout</button>
         </div>
             <h1>Patients List</h1>
             <table>
@@ -151,7 +170,7 @@ const OrgView = ({ hospital_id }) => {
                                 <td>
                                     <input
                                         type="email"
-                                        placeholder="Enter email"
+                                        placeholder="Enter patient email..."
                                         value={emails[patient.userId] || ''}
                                         onChange={(e) => handleEmailChange(patient.userId, e.target.value)}
                                     />
@@ -164,6 +183,7 @@ const OrgView = ({ hospital_id }) => {
                     )}
                 </tbody>
             </table>
+        </div>
         </div>
     );
 };

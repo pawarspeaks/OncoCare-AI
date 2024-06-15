@@ -99,36 +99,61 @@ const getUserProfile=async(req,res)=>{
 }
 
 
-const updateUserProfile=async(req,res)=>{
-    try{
-        const user=await User.findById(req.userId);
-    
-        if(!user){
-            deleteUserCookie(res);
-    
-            return res.status(NOT_FOUND_CODE).send({success:FAILED_STATUS,message:"Account Not Found"});
-        } 
-    
-        const {name,email,password,context,twitter_handle}=req.body;
-    
-        user.name=name || user.name;
-        user.email=email || user.email;
-        user.password=password || user.password;
+const updateUserProfile = async (req, res) => {
+    try {
+      const user = await User.findById(req.userId);
   
-        const updateUser=await user.save();
+      if (!user) {
     
-        res.status(SUCCESS_CODE).send({success:SUCCESS_STATUS,message:"Updated User Profile",details:{
-            _id:updateUser._id,
-            name:updateUser.name,
-            email:updateUser.email,
-
-        }});
+        return res.status(NOT_FOUND_CODE).send({ success: FAILED_STATUS, message: "Account Not Found" });
+      }
+  
+      // Extract details from the request body
+      const { email, password, doctorId, hospital_id, patientDetails } = req.body;
+  
+      // Update the user fields if they are provided in the request
+      user.email = email || user.email;
+      user.password = password || user.password;
+      user.doctorId = doctorId || user.doctorId;
+      user.hospital_id = hospital_id || user.hospital_id;
+  
+      // Update patient details if provided in the request
+      if (patientDetails) {
+        user.patientDetails = {
+          ...user.patientDetails, // Keep existing details
+          ...patientDetails, // Override with new details
+          comorbidities: patientDetails.comorbidities || user.patientDetails.comorbidities,
+          diseaseStates: patientDetails.diseaseStates || user.patientDetails.diseaseStates,
+          procedures: patientDetails.procedures || user.patientDetails.procedures,
+          treatment: patientDetails.treatment || user.patientDetails.treatment,
+          labResults: patientDetails.labResults || user.patientDetails.labResults,
+          imagingStudies: patientDetails.imagingStudies || user.patientDetails.imagingStudies,
+          medications: patientDetails.medications || user.patientDetails.medications,
+        };
+      }
+  
+      // Save the updated user
+      const updatedUser = await user.save();
+  
+      // Send the response with updated user details
+      res.status(SUCCESS_CODE).send({
+        success: SUCCESS_STATUS,
+        message: "Updated User Profile",
+        details: {
+          _id: updatedUser._id,
+          userId: updatedUser.userId,
+          email: updatedUser.email,
+          doctorId: updatedUser.doctorId,
+          hospital_id: updatedUser.hospital_id,
+          patientDetails: updatedUser.patientDetails,
+        },
+      });
+    } catch (error) {
+      res.status(SERVER_ERR_CODE).send({ success: FAILED_STATUS, message: SERVER_ERR_MSG, error: error.message });
     }
-    catch(error){
-        res.status(SERVER_ERR_CODE).send({success:FAILED_STATUS,message:SERVER_ERR_MSG,error:error.message});
-    }
-}
+ };
 
+  
 const userExists=async(req,res)=>{
     try{
         const {email}=req.body;
@@ -205,9 +230,18 @@ const logout=async(req,res)=>{
 }
 
 
+const sendMessage = async (req, res) => {
+    try {
+        const userId = req.params.userId; // Extract user ID from request parameters
+        const message = `Hello, User ${userId}!`; // Construct the message using the user ID
+        res.status(200).json({ message }); // Send the message as JSON response
+    } catch (error) {
+        res.status(500).json({ error: error.message }); // Handle errors
+    }
+};
 
 
 
 export {
     // createUser
-    loginUser,getUserProfile,updateUserProfile,checkOtp,changePassword,userExists,logout};
+    loginUser,getUserProfile,updateUserProfile,checkOtp,changePassword,userExists,logout,sendMessage};

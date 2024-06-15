@@ -1,6 +1,6 @@
 import express from "express";
-import {loginAdmin, checkOtp, changePassword, logout} from "../Controllers/AdminController.js";
-import { isAuthenticatedAdmin } from "../Middlewares/auth.js";
+import {loginAdmin, checkOtp, changePassword, logout,fetchAllPatients,updateUserProfile,updateHospitalProfile} from "../Controllers/AdminController.js";
+import { isAuthenticatedAdmin,isAuthenticatedUser,isVerifiedAdmin } from "../Middlewares/auth.js";
 import { sendEmail } from "../Features/sendEmail.js";
 
 const AdminRouter=express.Router();
@@ -8,10 +8,6 @@ const AdminRouter=express.Router();
 // AdminRouter.post("/create",createUser);
 
 AdminRouter.post("/login",loginAdmin);
-
-// AdminRouter.get("/profile",isAuthenticatedAdmin,getUserProfile);
-
-// AdminRouter.put("/profile",isAuthenticatedAdmin,updateUserProfile);
 
 AdminRouter.post("/sendemail",sendEmail);
 
@@ -22,5 +18,13 @@ AdminRouter.post("/checkotp/:userId",checkOtp);
 AdminRouter.put("/changepassword",changePassword);
 
 AdminRouter.post("/logout",isAuthenticatedAdmin,logout);
+
+AdminRouter.get("/patients", isAuthenticatedAdmin, fetchAllPatients);
+
+AdminRouter.put("/update-patient",isAuthenticatedAdmin, updateUserProfile);
+
+AdminRouter.put("/update-hospital",isAuthenticatedAdmin, updateHospitalProfile);
+
+AdminRouter.post("/verified",isVerifiedAdmin);
 
 export default AdminRouter;

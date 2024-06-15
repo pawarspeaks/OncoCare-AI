@@ -7,6 +7,9 @@ import UserLogin from './pages/Users/User_Login/UserLogin';
 import OrgView from './pages/Hospitals//Hospital_View_Patients/OrgView';
 import OrgHome from './pages/Hospitals/Hospital_Home/OrgHome';
 import OrgDataMgmt from './pages/Hospitals/Hospital_Data_Mgmt/OrgDataMgmt';
+import AdminDashboard from './pages/Admin/Admin_Dashboard/AdminDashboard';
+import UserMain from './pages/Users/Users_Main/UserMain'; 
+
 
 import './App.css';
 
@@ -30,6 +33,9 @@ function Main() {
         <Route path="/OrgView" element={<OrgView />} />
         <Route path="/OrgHome" element={<OrgHome />} />
         <Route path="/OrgDataMgmt" element={<OrgDataMgmt />} />
+        <Route path="/UserMain" element={<UserMain />} /> {/* Add this line */}
+        <Route path="/AdminDashboard" element={<AdminDashboard />} />
+
 
       </Routes>
     </div>

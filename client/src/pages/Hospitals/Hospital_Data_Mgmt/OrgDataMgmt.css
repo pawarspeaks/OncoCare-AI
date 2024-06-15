@@ -34,7 +34,7 @@
 body, html {
     height: 100%;
     font-family: 'Product Sans'; 
-
+    height:fit-content;
 }
 
 .org-data-management {
@@ -45,16 +45,25 @@ body, html {
 
 .side-panel {
     width: 20%;
-    background-color: #f0f0f0;
+    background-color:#05aa31 ;
     padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
+.side-panel button {
+    background-color: #ececec !important;
+    color: black !important;
+}
+
+.side-panel button:hover {
+    background-color: #a0a0a0 !important;
+}
+
 .oncocare-header {
     font-size: 40px;
-    color: black;
+    color: rgb(255, 255, 255);
     font-weight: bold;
     margin-bottom: 10px;
     text-align: center;
@@ -62,7 +71,7 @@ body, html {
 
 .hospital-name {
     font-size: 16px;
-    color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
     margin-bottom: 20px;
     text-align: center;
 }
@@ -78,7 +87,7 @@ body, html {
     width: 100%;
     margin-bottom: 20px;
     padding: 10px;
-    background-color: #007bff;
+    background-color: #1769c0;
     color: white;
     border: none;
     cursor: pointer;
@@ -99,20 +108,24 @@ body, html {
 
 .patient-details {
     margin-bottom: 20px;
+    color: black;
 }
 
 .patient-details h2 {
     margin-bottom: 10px;
+    color: black;
 }
 
 .input-group {
     margin-bottom: 10px;
     display: flex;
     flex-direction: column;
+    color: black;
 }
 
 .input-group label {
     font-weight: bold;
+    color: black;
     margin-bottom: 5px;
 }
 
@@ -122,7 +135,9 @@ body, html {
     max-width: 100%;
     padding: 5px;
     border: 1px solid #000000;
-    border-radius: 3px;
+    color: rgb(255, 255, 255);
+    background-color: black !important;
+    border-radius: 3px !important; 
 }
 
 .input-group input:hover {
@@ -139,6 +154,13 @@ body, html {
 
 .chat-bot h2 {
     margin-bottom: 10px;
+}
+
+.chat-bot a {
+ text-decoration: underline;
+ cursor:pointer;
+ color: rgb(0, 74, 203);
+ margin-top: 5px;
 }
 
 .chat-box {

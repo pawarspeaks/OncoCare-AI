@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './UserLogin.css';
+import loginImage from '../../../assets/user.png'; 
 
 const UserLogin = () => {
   const [email, setUserEmail] = useState('');
@@ -23,7 +24,7 @@ const UserLogin = () => {
     
       if (response.data && response.data.success) {
         // Redirect user to main page after successful login
-        navigate('/UserDashboard');
+        navigate('/UserMain'); // Corrected route
       } else {
         setError('Invalid User email or password');
       }
@@ -37,34 +38,37 @@ const UserLogin = () => {
     <div className="logincard">
       <h1>OncoCare</h1>
       <p>User Login to dashboard</p>
-
-      <form onSubmit={handleSubmit}>
-        <div className="loginContainer">
-          <span>Login</span>
+      <div className="loginContent">
+        <div className="imageContainer">
+          <img src={loginImage} alt="Login" className="loginImage" />
         </div>
-        <label htmlFor="email">email address</label>
-        <input
-          type="text"
-          id="email"
-          name="email"
-          placeholder="Enter your email address"
-          required
-          value={email}
-          onChange={(e) => setUserEmail(e.target.value)}
-        />
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          placeholder="Enter your password"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="submit">Login</button>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-      </form>
+        <form onSubmit={handleSubmit} className="loginForm">
+          <div className="formContainer">
+            <label htmlFor="email">Email address</label>
+            <input
+              type="text"
+              id="email"
+              name="email"
+              placeholder="Enter your email address"
+              required
+              value={email}
+              onChange={(e) => setUserEmail(e.target.value)}
+            />
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Enter your password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <button type="submit">Login</button>
+            {error && <p className="error">{error}</p>}
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
