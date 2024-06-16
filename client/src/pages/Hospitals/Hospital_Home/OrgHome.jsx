@@ -3,7 +3,7 @@ import { Link, Outlet, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './OrgHome.css';
 import hospitalImage from '../../../assets/hospital.png'; // Import the image
-
+import Layout from '../../../Layout';
 const OrgHome = () => {
   const [HospitalData, setProfile] = useState(null);
   const navigate = useNavigate(); 
@@ -57,29 +57,29 @@ const OrgHome = () => {
   };
 
   return (
+    <Layout>
     <div className="organization-containers">
       <div className="white-boxs">
-        <div className="header">
+        <div className="head">
           {HospitalData ? (
             <>
               <h1>Welcome to {HospitalData.hospital.hospital_name || 'Please login'}</h1>
-              <h2>Organization ID: {HospitalData.hospital.hospital_id || 'NA'}</h2>
+              <h2 >Organization ID: {HospitalData.hospital.hospital_id || 'NA'}</h2>
             </>
           ) : (
             <>
-              <h1>Welcome to Surya Hospital, Nanded</h1>
-              <h2>Organization ID: 21000</h2>
+              
               <p><i>Not Logged In, please login to access your dashboard if you're an Organization/Hospital</i></p>
             </>
           )}
         </div>
 
-        <div className="contents">
+        <div className="contentsss">
           
           <div className="hospital-image">
             <img src={hospitalImage} alt="Hospital" />
           </div>
-          <div className="options">
+          <div className="optionss">
             <Link className="link1" to="/OrgDataMgmt">Add Patient</Link>
             <Link className="link1" to="/OrgView">View Patient</Link>
           </div>
@@ -88,6 +88,7 @@ const OrgHome = () => {
       </div>
       <Outlet />
     </div>
+    </Layout>
   );
 };
 

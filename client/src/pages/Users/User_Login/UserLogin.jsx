@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './UserLogin.css';
-import loginImage from '../../../assets/user.png'; 
+import loginImage from '../../../assets/gurl.png';
+import Layout from '../../../Layout';
 
 const UserLogin = () => {
   const [email, setUserEmail] = useState('');
@@ -35,6 +36,7 @@ const UserLogin = () => {
   };
 
   return (
+    <Layout>
     <div className="logincard">
       <h1>OncoCare</h1>
       <p>User Login to dashboard</p>
@@ -70,6 +72,7 @@ const UserLogin = () => {
         </form>
       </div>
     </div>
+    </Layout>
   );
 };
 

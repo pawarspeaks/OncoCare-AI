@@ -31,7 +31,7 @@ body {
   align-items: center;
 }
 
-.logincard {
+.layout .logincard {
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -41,6 +41,7 @@ body {
   margin: 0 auto;
   font-family: 'Helvetica Neue', sans-serif;
   text-align: center;
+
 }
 
 .logincard h1 {
@@ -84,43 +85,49 @@ body {
   align-items: flex-start;
   width: 100%;
   padding: 2vh;
+  font-size: medium;
   box-sizing: border-box;
 }
 
-.logincard label {
-  display: block;
-  text-align: left;
-  color: #7abb40 !important;
-  margin-bottom: 5px;
-  width: 100%;
-}
+/* Adjust placeholder styles to maintain consistency */
 
-.logincard input {
+.logincard input[type="text"],
+.logincard input[type="email"],
+.logincard input[type="password"] {
   width: 100%;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #ccc; /* Ensure consistent border */
   border-radius: 5px;
   margin-bottom: 20px;
 }
 
+.logincard input[type="text"]::placeholder,
+.logincard input[type="email"]::placeholder,
+.logincard input[type="password"]::placeholder {
+  color: #999; /* Placeholder color */
+  padding: 10px;
+}
+
 .logincard button {
-  background-color: #00ff2f !important;
+  background-color: #05aa31!important; 
   color: #fff;
   border: none;
+  font-size: medium;
   padding: 10px 20px;
-  border-radius: 5px;
+  border-radius: 2px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .logincard button:hover {
-  background-color: #00b30c !important;
+  background-color: #00b30c;
 }
 
 .logincard p.error {
   color: #ff0000;
   margin-top: 10px;
 }
+
 
 .form {
   display: flex;
@@ -136,8 +143,8 @@ body {
 
 .formContainer :focus,
 .tab:focus {
-  outline: none;
+
   outline: 2px solid #6ff97a;
-  border: none;
+  border: none !important;
   background-color: #fff !important;
 }

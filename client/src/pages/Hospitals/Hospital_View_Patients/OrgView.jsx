@@ -1,191 +1,221 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import './OrgView.css';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import "./OrgView.css";
 
 const OrgView = ({ hospital_id }) => {
-    const [patients, setPatients] = useState([]);
-    const [hospitalId, setHospitalId] = useState(null);
-    const [emails, setEmails] = useState({});
-    const navigate = useNavigate(); 
-    const [hospitalName, setHospitalName] = useState('');
+  const [patients, setPatients] = useState([]);
+  const [hospitalId, setHospitalId] = useState(null);
+  const [emails, setEmails] = useState({});
+  const navigate = useNavigate();
+  const [hospitalName, setHospitalName] = useState("");
 
-    useEffect(() => {
-        const isVerifiedHospital = async () => {
-            try {
-                // Verify user authentication and role
-                const authResponse = await axios.post('http://localhost:3001/hospitals/verified', {}, { withCredentials: true });
-                
-                if (!authResponse.data.success) {
-                    setTimeout(() => {
-                        alert("Please make a login to access any further details");
-                        window.location.href = '/'; // Redirect to home page after user clicks "OK"
-                    }, 500); // 500 milliseconds delay before showing alert
-                    return;
-                }
-            } catch (error) {
-                console.error('Error verifying hospital:', error);
-                setTimeout(() => {
-                    alert("Please make a login to access any further details");
-                    window.location.href = '/'; // Redirect to home page after user clicks "OK"
-                }, 500); // 500 milliseconds delay before showing alert
-            }
-        };
-
-        setTimeout(() => {
-            isVerifiedHospital();
-        }, 500); // 500 milliseconds delay before starting verification
-    }, [navigate]);
-
-    useEffect(() => {
-        const fetchHospitalProfile = async () => {
-            try {
-                const profileresponse = await axios.get('http://localhost:3001/hospitals/profile', { withCredentials: true });
-                setHospitalId(profileresponse.data.hospital.hospital_id); // Set hospitalId with the actual ID
-                setHospitalName(profileresponse.data.hospital.hospital_name);
-            } catch (error) {
-                console.error('Error fetching hospital profile:', error);
-            }
-        };
-
-        setTimeout(() => {
-            fetchHospitalProfile();
-        }, 500); // 500 milliseconds delay before fetching hospital profile
-    }, []);
-
-
-
-    useEffect(() => {
-        const fetchPatients = async () => {
-            if (!hospitalId) return; // Do nothing if hospitalId is not set
-            try {
-                const response = await axios.get(`http://localhost:3001/hospitals/patients?hospital_id=${hospitalId}`, {
-                    withCredentials: true
-                });
-                // Ensure response.data.patients is accessed correctly
-                setPatients(Array.isArray(response.data.patients) ? response.data.patients : []);
-                console.log(response.data.patients);
-            } catch (error) {
-                console.error('Error fetching patients:', error);
-            }
-        };
-
-        const delayedFetchPatients = async () => {
-            await new Promise(resolve => setTimeout(resolve, 1000)); // Add a delay of 1 second
-            fetchPatients();
-        };
-
-        delayedFetchPatients();
-    }, [hospitalId]);
-
-    // Function to handle sending an invitation email
-    const sendInvitationEmail = async (patient) => {
-        const { userId, doctorId, password, hospital_id } = patient;
-        const email = emails[userId];
-        if (!email) {
-            alert('Please enter an email for this patient.');
-            return;
-        }
-        try {
-           await axios.post('http://localhost:3001/hospitals/send-invitation-email', {
-            userId,
-            doctorId,
-            password,
-            hospital_id,
-            email
-        }, {
-            withCredentials: true
-        });
-        
-            alert('Invitation email sent successfully');
-            // Clear the email input after sending the email
-            setEmails({...emails, [userId]: ''});
-        } catch (error) {
-            console.error('Error sending invitation email:', error);
-            alert('Error sending invitation email');
-        }
-    };
-
-    // Function to handle input change for email
-    const handleEmailChange = (userId, email) => {
-        setEmails({...emails, [userId]: email});
-    };
-
-
-    const handleLogout = async () => {
+  useEffect(() => {
+    const isVerifiedHospital = async () => {
       try {
-        await axios.post('http://localhost:3001/hospitals/logout', {}, { withCredentials: true });
-        navigate('/'); // Redirect to the login page after logout
+        // Verify user authentication and role
+        const authResponse = await axios.post(
+          "http://localhost:3001/hospitals/verified",
+          {},
+          { withCredentials: true }
+        );
+
+        if (!authResponse.data.success) {
+          setTimeout(() => {
+            alert("Please make a login to access any further details");
+            window.location.href = "/"; // Redirect to home page after user clicks "OK"
+          }, 500); // 500 milliseconds delay before showing alert
+          return;
+        }
       } catch (error) {
-        console.error('Error logging out:', error);
+        console.error("Error verifying hospital:", error);
+        setTimeout(() => {
+          alert("Please make a login to access any further details");
+          window.location.href = "/"; // Redirect to home page after user clicks "OK"
+        }, 500); // 500 milliseconds delay before showing alert
       }
     };
-    const handleAddPatients = () => {
-        navigate('/OrgDataMgmt');
+
+    setTimeout(() => {
+      isVerifiedHospital();
+    }, 500); // 500 milliseconds delay before starting verification
+  }, [navigate]);
+
+  useEffect(() => {
+    const fetchHospitalProfile = async () => {
+      try {
+        const profileresponse = await axios.get(
+          "http://localhost:3001/hospitals/profile",
+          { withCredentials: true }
+        );
+        setHospitalId(profileresponse.data.hospital.hospital_id); // Set hospitalId with the actual ID
+        setHospitalName(profileresponse.data.hospital.hospital_name);
+      } catch (error) {
+        console.error("Error fetching hospital profile:", error);
+      }
     };
 
-    const handleViewHomePage = () => {
-        navigate('/OrgHome');
+    setTimeout(() => {
+      fetchHospitalProfile();
+    }, 500); // 500 milliseconds delay before fetching hospital profile
+  }, []);
+
+  useEffect(() => {
+    const fetchPatients = async () => {
+      if (!hospitalId) return; // Do nothing if hospitalId is not set
+      try {
+        const response = await axios.get(
+          `http://localhost:3001/hospitals/patients?hospital_id=${hospitalId}`,
+          {
+            withCredentials: true,
+          }
+        );
+        // Ensure response.data.patients is accessed correctly
+        setPatients(
+          Array.isArray(response.data.patients) ? response.data.patients : []
+        );
+        console.log(response.data.patients);
+      } catch (error) {
+        console.error("Error fetching patients:", error);
+      }
     };
 
-    return (
-        <div className="View-Page">
-        <div className="side-panel">
+    const delayedFetchPatients = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Add a delay of 1 second
+      fetchPatients();
+    };
+
+    delayedFetchPatients();
+  }, [hospitalId]);
+
+  // Function to handle sending an invitation email
+  const sendInvitationEmail = async (patient) => {
+    const { userId, doctorId, password, hospital_id } = patient;
+    const email = emails[userId];
+    if (!email) {
+      alert("Please enter an email for this patient.");
+      return;
+    }
+    try {
+      await axios.post(
+        "http://localhost:3001/hospitals/send-invitation-email",
+        {
+          userId,
+          doctorId,
+          password,
+          hospital_id,
+          email,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      alert("Invitation email sent successfully");
+      // Clear the email input after sending the email
+      setEmails({ ...emails, [userId]: "" });
+    } catch (error) {
+      console.error("Error sending invitation email:", error);
+      alert("Error sending invitation email");
+    }
+  };
+
+  // Function to handle input change for email
+  const handleEmailChange = (userId, email) => {
+    setEmails({ ...emails, [userId]: email });
+  };
+
+  const handleLogout = async () => {
+    try {
+      await axios.post(
+        "http://localhost:3001/hospitals/logout",
+        {},
+        { withCredentials: true }
+      );
+      navigate("/"); // Redirect to the login page after logout
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
+  };
+  const handleAddPatients = () => {
+    navigate("/OrgDataMgmt");
+  };
+
+  const handleViewHomePage = () => {
+    navigate("/OrgHome");
+  };
+
+  return (
+    <div className="View-Page">
+      <div className="side-panel">
         <div className="oncocare-header">OncoCare</div>
         <div className="hospital-name">{hospitalName}</div>
         <div className="options">
-            <button onClick={handleAddPatients}>View Patients</button>
-            <button onClick={handleViewHomePage}>Hospital Home Page</button>
-            <button onClick={handleLogout}>Logout</button>
+          <button onClick={handleAddPatients}>Add Patients</button>
+          <button onClick={handleViewHomePage}>Hospital Home Page</button>
+          <button onClick={handleLogout}>Logout</button>
         </div>
-    </div>  
+      </div>
+      <div className="view-patients">
+        <div className="logout-container"></div>
+
         <div className="view-patients">
-             <div className="logout-container">
-        </div>
-            <h1>Patients List</h1>
+          <div className="white-boxss">
+            <p className="pagess">Patients List</p>
             <table>
-                <thead>
-                    <tr>
-                        <th>User ID</th>
-                        <th>Doctor ID</th>
-                        <th>Password</th>
-                        <th>Organization ID</th>
-                        <th>Email</th>
-                        <th>Invite</th>
+              <thead>
+                <tr>
+                  <th>User ID</th>
+                  <th>Doctor ID</th>
+                  <th>Password</th>
+                  <th>Organization ID</th>
+                  <th>Email</th>
+                  <th>Invite</th>
+                </tr>
+              </thead>
+              <tbody>
+                {patients.length === 0 ? (
+                  <tr>
+                    <td colSpan="6">No patients found.</td>
+                  </tr>
+                ) : (
+                  patients.slice(-6).map((patient, index) => (
+                    <tr
+                      key={index}
+                      className={
+                        patient.hospital_id === hospital_id ? "highlight" : ""
+                      }
+                    >
+                      <td>{patient.userId}</td>
+                      <td>{patient.doctorId}</td>
+                      <td>{patient.password}</td>
+                      <td>{patient.hospital_id}</td>
+                      <td>{patient.email}
+                      
+                        <input
+                          type="email"
+                          placeholder="Enter patient email..."
+                          value={emails[patient.userId] || ""}
+                          onChange={(e) =>
+                            handleEmailChange(patient.userId, e.target.value)
+                          }
+                        />
+                      </td>
+                      <td>
+                    <button  className="btn" onClick={() => sendInvitationEmail(patient)}>
+                          Invite
+                        </button>
+                      </td>
                     </tr>
-                </thead>
-                <tbody>
-                    {patients.length === 0 ? (
-                        <tr>
-                            <td colSpan="6">No patients found.</td>
-                        </tr>
-                    ) : (
-                        patients.slice(-6).map((patient, index) => (
-                            <tr key={index} className={patient.hospital_id === hospital_id ? 'highlight' : ''}>
-                                <td>{patient.userId}</td>
-                                <td>{patient.doctorId}</td>
-                                <td>{patient.password}</td>
-                                <td>{patient.hospital_id}</td>
-                                <td>{patient.email}</td> {/* Add email field */}
-                                <td>
-                                    <input
-                                        type="email"
-                                        placeholder="Enter patient email..."
-                                        value={emails[patient.userId] || ''}
-                                        onChange={(e) => handleEmailChange(patient.userId, e.target.value)}
-                                    />
-                                </td>
-                                <td>
-                                    <button onClick={() => sendInvitationEmail(patient)}>Invite</button>
-                                </td>
-                            </tr>
-                        ))
-                    )}
-                </tbody>
+                  ))
+                )}
+              </tbody>
             </table>
+          </div>
         </div>
-        </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default OrgView;

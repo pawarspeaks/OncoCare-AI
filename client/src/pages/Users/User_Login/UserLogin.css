@@ -25,10 +25,8 @@
 body {
   margin: 0;
   padding: 0;
-  background: white !important;
   display: flex;
-  justify-content: center;
-  align-items: center;
+
 }
 
 .logincard {
@@ -36,23 +34,24 @@ body {
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 30px;
-  max-width: 1200px !important;
+
   height: auto;
-  margin: 0 auto;
   font-family: 'Helvetica Neue', sans-serif;
   text-align: center;
 }
 
+
 .logincard h1 {
   color: #009f1b !important;
   margin-bottom: 20px;
+  margin-top: 0px;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .logincard p {
-  color: #c1c79e !important;
+  color: #c2bf00 !important;
   margin-bottom: 15px !important;
-  font-weight: 100px !important;
+  font-weight: 10px !important;
 }
 
 .loginContent {
@@ -67,6 +66,7 @@ body {
   justify-content: center;
   width: 100%;
 }
+
 
 .imageContainer {
   margin-right: 20px;
@@ -104,17 +104,17 @@ body {
 }
 
 .logincard button {
-  background-color: #00ff2f !important;
+  background-color: #05aa31!important; 
   color: #fff;
   border: none;
   padding: 10px 20px;
-  border-radius: 5px;
+  border-radius: 2px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .logincard button:hover {
-  background-color: #00b30c !important;
+  background-color: #007608 !important;
 }
 
 .logincard p.error {

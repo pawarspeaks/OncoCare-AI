@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './OrgLogin.css';
-import loginImage from '../../../assets/login.png';
-
+import loginImage from '../../../assets/admin.png';
+import Layout from '../../../Layout';
 const OrgLogin = () => {
   const [hospital_id, setHospitalId] = useState('');
   const [password, setPassword] = useState('');
@@ -34,6 +34,7 @@ const OrgLogin = () => {
   };
 
   return (
+    <Layout>
     <div className="logincard">
       <h1>OncoCare</h1>
       <p>Login to access your hospital dashboard</p>
@@ -69,6 +70,7 @@ const OrgLogin = () => {
         </form>
       </div>
     </div>
+    </Layout>
   );
 };
 

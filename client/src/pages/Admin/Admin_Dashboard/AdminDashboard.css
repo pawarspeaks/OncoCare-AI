@@ -26,28 +26,55 @@
 /* General Body Styling */
 body {
   background: #e8fdf1;
-  font-family: "Roboto", sans-serif;
   margin: 0;
   padding: 0;
-  height:fit-content;
+ 
 }
 
 /* Dashboard Container */
 .dashboard {
-  padding: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  
 }
 
 /* Admin Dashboard Heading */
 .admin-dashboard-heading {
   text-align: center;
   color: #009f1b;
-  font-size: 40px;
-  padding: 10px 0;
+  font-size: 30px !important;
+  margin-top: 0px !important;
+  padding-bottom: 20px !important; /* Adjust padding if needed */
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Navigation Buttons Styling */
+.navigation-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* Add gap between buttons */
+  margin-bottom: 20px; /* Add margin below buttons */
+}
+
+.small-navigation-button {
+  background-color: #00783c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 14px;
+  text-transform: uppercase;
+  font-family: "Roboto", sans-serif;
+  width: 150px;
+  text-align: center;
+  transition: background-color 0.3s;
+}
+
+.small-navigation-button:hover {
+  background-color: #13673d;
 }
 
 /* Content Wrapper */
@@ -60,10 +87,11 @@ body {
 h1 {
   font-size: medium;
 }
+
 /* White Container */
 .white-container {
-  width: 500px;
-  height: 350px;
+  width: 540px;
+  height: 320px;
   background-color: #fff;
   padding: 20px;
   border-radius: 15px;
@@ -82,14 +110,13 @@ h1 {
   align-items: center;
 }
 
-.buttons-container.small {
-  align-items: flex-start;
-}
 
 .buttons-container.large .card-button {
   width: 300px;
   height: 95px;
-  background-color: #0d9953;
+  background-color: #046d20;
+  box-shadow: 0 0 10px rgba(0, 105, 19, 0.493);
+  text-transform: none;
 }
 
 .buttons-container.large .card-button img {
@@ -124,14 +151,13 @@ h1 {
   cursor: pointer;
   transition: all 0.4s;
   font-size: 16px;
-  text-transform: uppercase;
   font-family: "Roboto", sans-serif;
   gap: 10px;
 }
 
 .card-button img {
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
 }
 
 .card-button:hover {
@@ -142,38 +168,6 @@ h1 {
 .card-button:focus {
   outline: none;
 }
-
-/* Navigation Buttons Styling */
-.navigation-buttons {
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  left: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.small-navigation-button {
-  background-color: #00783c;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 15px;
-  cursor: pointer;
-  font-size: 14px;
-  text-transform: uppercase;
-  font-family: "Roboto", sans-serif;
-  margin-bottom: 10px;
-  width: 150px;
-  text-align: center;
-  transition: background-color 0.3s;
-}
-
-.small-navigation-button:hover {
-  background-color: #13673d;
-}
-
-
 
 /* Cards Container */
 .cards-container {
@@ -199,9 +193,11 @@ h1 {
 }
 
 .card:hover {
-  box-shadow: 0 0 10px rgba(0, 218, 116, 0.8);
+  box-shadow: 0 0 10px rgb(0, 137, 73);
   transform: translateY(-5px);
+  border: none;
 }
+
 
 .card h4 {
   margin: 0 0 10px 0;
@@ -215,6 +211,26 @@ h1 {
 }
 
 /* Card Actions Styling */
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* This will push the card-actions to the bottom */
+  width: calc(33.333% - 20px); /* Adjust width for three cards per row with gap */
+  background: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
+  box-sizing: border-box; /* Ensure padding and border are included in the width */
+  overflow: hidden; /* Ensure content does not overflow */
+}
+
+.card h4, .card h5 {
+  margin: 0 0 10px 0;
+  word-wrap: break-word; /* Ensure long words break and do not overflow */
+}
+
 .card-actions {
   display: flex;
   justify-content: space-between;
@@ -249,46 +265,114 @@ h1 {
   background-color: #c82333;
 }
 
+.card h4 {
+  font-size: 15px; /* Adjust font size for h4 */
+  margin: 0 0 10px 0;
+  color: #13673d;
+ 
+}
 
+.card h5 {
+  font-size: 14px; /* Adjust font size for h5 */
+  margin: 0 0 10px 0;
+  word-wrap: break-word; /* Ensure long words break and do not overflow */
+}
+
+.card h4 {
+  font-size: 15px; /* Adjust font size for h4 */
+  margin: 0 0 10px 0;
+}
+
+.card h5 {
+  font-size: 14px; /* Adjust font size for h5 */
+  margin: 0 0 10px 0;
+  word-wrap: break-word; /* Ensure long words break and do not overflow */
+}
+
+.card h5 .label {
+  font-weight: bold; /* Optional: Make the labels bold */
+}
+
+.card h5 .hospital-id-label {
+  color: #0e8229; /* Color for Hospital ID label */
+}
+
+.card h5 .patient-name-label {
+  color: #0e8229; 
+}
+
+.card h5 .email-label {
+  color: #0e8229; 
+}
+
+.card h5 .gender-label {
+  color: #0e8229; 
+}
+
+
+
+/*   form   */
 .edit-patient-form {
-  background-color: #eaeaea;
-  display: inline-block;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align all items to the left */
   padding: 20px;
-  border: 1px solid #ccc;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 25px;
-  max-width: 500px;
+  width: 400px; /* Increased width */
+  height: auto; /* Allow form to adjust height automatically */
+  max-height: none; /* Remove maximum height restriction */
   margin: 0 auto;
+  font-size: 14px; /* Base font size */
 }
 
 .edit-patient-form h2 {
-  text-align: center;
+  width: 100%;
+  text-align: center !important;
+  margin-bottom: 20px; /* Added margin for better spacing */
+  font-size: 20px; 
+  font-weight: bold;
 }
 
 .edit-patient-form label {
-  display: block;
-  margin-bottom: 0px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px; /* Adjusted margin for better spacing */
+  font-size: 14px; /* Font size for labels */
+}
+
+.edit-patient-form label span {
+  display: inline-block; /* Ensure proper alignment */
+  width: 100px; /* Set a fixed width for the label text */
+  margin-right: 10px; /* Space between label text and input/select */
+  text-align: left; /* Align text to the left */
 }
 
 .edit-patient-form input,
 .edit-patient-form select {
-  width: 100%;
+  flex: 1; /* Allow input/select to take available space */
   padding: 8px;
-  margin-top: 5px;
-  margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 4px !important;
+  font-size: 14px; /* Font size for input and select fields */
 }
 
 .form-actions {
+  width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start; /* Align buttons to the left */
+  margin-top: 20px; /* Added margin for better spacing */
 }
 
 .form-actions button {
-  padding: 10px 20px;
+  padding: 10px 13px; /* Increased padding for better spacing */
+  margin-right: 10px; /* Space between buttons */
   border: none;
   border-radius: 8px !important;
   cursor: pointer;
+  font-size: 14px; /* Font size for buttons */
 }
 
 .form-actions button[type="submit"] {
@@ -307,33 +391,49 @@ h1 {
 }
 
 
-.edit-hospital-form{
-  background-color: #eaeaea;
+
+
+
+
+
+/**/
+.edit-hospital-form {
+  background-color: #ffffff;
   display: inline-block;
   padding: 20px;
-  border: 1px solid #ccc;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 25px;
-  max-width: 500px;
+  width: 400px !important;
   margin: 0 auto;
+  font-size: 14px; /* Base font size */
 }
-
-
 
 .edit-hospital-form h3 {
   text-align: center;
+  margin-bottom: 20px; /* Added margin for better spacing */
+  font-size: 18px; /* Specific font size for the heading */
 }
 
 .edit-hospital-form label {
-  display: block;
-  margin-bottom: 0px;
+  display: flex; /* Use flexbox to align items */
+  align-items: center; /* Center align items vertically */
+  margin-bottom: 10px; /* Adjusted margin for better spacing */
+  font-weight: bold; /* Make label text bold */
+  text-align: left;
+}
+
+.edit-hospital-form label span {
+  min-width: 100px; /* Set a minimum width for the label text */
+  margin-right: 10px; /* Space between label text and input/select */
 }
 
 .edit-hospital-form input,
 .edit-hospital-form select {
-  width: 100%;
+  width: calc(100% - 110px); /* Adjust input/select width to accommodate label width and space */
   padding: 8px;
   margin-top: 5px;
   margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 4px !important;
+  font-size: 14px; /* Font size for input and select fields */
 }

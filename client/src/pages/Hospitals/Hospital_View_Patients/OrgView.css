@@ -22,27 +22,17 @@
   font-style: normal;
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  display: flex;
-  height: 100vh;
-}
 
 .View-Page {
   display: flex;
-  height: 100vh;
-  width: 100vw;
 }
 
 .side-panel {
   width: 20%;
   background-color: #05aa31;
-  padding: 20px;
-  display: flex;
   flex-direction: column;
-  align-items: center;
-  height: 100vh; /* Set the height to 100% of the viewport height */
+  height: 100vh; 
+  
 }
 
 .side-panel button {
@@ -55,52 +45,130 @@ body {
 }
 
 .view-patients {
-  padding: 20px;
-  font-family: Arial, sans-serif;
+  display: flex;
+  margin: 0px; 
+  padding: 10px;
   color: black !important;
-  width: 80%;
-  margin: 0 0; /* Center the content horizontally */
+  justify-content: center;
+  align-items: center;
 }
 
-h1 {
+.white-boxss {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 5px;
   text-align: center;
-  margin-bottom: 20px;
+  width: 900px;
+  height: 480px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+ .pagess  {
+  text-align: center;
+  color: rgb(0, 150, 20) !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 30px;
+  margin-top: 5px;
+  font-family: 'Helvetica Neue', sans-serif; 
+  margin-bottom: 1px;
+}
+
+.table-container {
+  overflow-y: auto;
+  flex: 1;
+  width: 100%;
 }
 
 table {
   width: 100%;
-  border-collapse: collapse;
+ 
 }
 
 thead {
-  background-color: #f2f2f2;
-  color: #05aa31;
+  background-color: #0d6c1b !important;
+  color: #fff;
+  font-size: 5px !important;
+  position: sticky;
+  width: 100%;
+  top: 0;
+  table-layout: fixed;
 }
 
-th,
-td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
+tbody tr:nth-child(even) {
+  background-color: #e5ffb8;
 }
 
-tr:nth-child(even) {
-  background-color: #f9f9f9;
+tbody tr:nth-child(odd) {
+  background-color: #c5fec2;
 }
 
-tr:hover {
-  background-color: #c0c0c0;
+tbody tr:hover {
+  background-color: #d2cd8e;
 }
 
-.highlight {
-  background-color: #ffffcc; /* Light yellow */
+th, td {
+  padding: 2px;
+  text-align: center;
+  border-bottom: 1px solid #dddddd;
+  word-wrap: break-word;
+  font-size: 12px;
 }
 
-td input {
-  background-color: black;
+
+thead th:last-child,
+tbody td:last-child {
+  text-align: right;
+}
+
+
+
+
+input[type="email"] {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 180px;
+  height: 20px;
+  box-sizing: border-box;
+  line-height: 20px; /* Ensures text is vertically centered */
+}
+
+input[type="email"]::placeholder {
+  color: #d1d1d1;
+  opacity: 1; 
+  line-height: 20px; /* Ensures placeholder text is vertically centered */
+}
+
+input::placeholder {
+  color: #d1d1d1;
+  opacity: 1; 
+}
+
+input[type="email"]:focus {
+  border-color: #ffd700;
+}
+
+.invite-button-container {
+  text-align: right;
+}
+
+.btn {
+  background-color: #12aa01 !important;
   color: white;
-  width: 220px;
-  font-size: 18px;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-family: 'segoe-ui-this';
+  font-size: 13px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.btn:hover {
+  background-color: #197708;
 }
 
 .logout-container {
@@ -110,7 +178,7 @@ td input {
 }
 
 .logout-button {
-  background-color: #f44336; /* Red */
+  background-color: #f44336;
   border: none;
   color: white;
   padding: 10px 20px;
@@ -124,5 +192,5 @@ td input {
 }
 
 .logout-button:hover {
-  background-color: #d32f2f; /* Darker red */
+  background-color: #d32f2f;
 }

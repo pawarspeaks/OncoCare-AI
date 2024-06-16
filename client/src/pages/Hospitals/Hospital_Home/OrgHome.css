@@ -27,6 +27,7 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
+  overflow: hidden
 }
 
 .white-boxs {
@@ -38,43 +39,54 @@
   display: flex;
   flex-direction: column;
   text-align: center;
+  height: auto;
+  width: 400px;
+  overflow: hidden; 
 }
 
 
 
-.header h1 {
+.head  h1 {
   color: rgb(0, 150, 20) !important;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.103);
-  font-size: 30px;
+  font-size: 20px !important;
+  margin-top: 25px;
 
 }
 
-.header h2 {
-  color: rgb(146, 139, 0) !important;
-  font-size: larger;
+.head h2 {
+  color: rgb(146, 139, 0);
+  font-size: 15px !important;
+  margin-top: 20px;
 }
 
-.header-id {
-  font-size: 1.2rem; 
-}
 
-.contents {
+.contentsss {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: row; /* Ensure items are laid out horizontally */
+  justify-content: space-between; /* Space out items evenly */
+  align-items: center; /* Center vertically */
+  margin: 0px; /* Adjust spacing */
+
 }
 
-.options {
+.hospital-image {
+  flex: 1; /* Take up remaining space */
+  margin-right: 20px; /* Space between image and options */
+}
+
+
+
+.optionss {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: flex-end; /* Align buttons to the right */
-  font-family: 'segoe-ui-this'; 
-  font-size: 18px;
-  font-style: bold;
-  text-align: left; /* Ensure text inside buttons is aligned right */
+  
+  /* Ensure text inside buttons is aligned right */
 }
 
-.options a {
+.optionss a {
   background-color: #00ae17;
   padding: 10px 20px;
   margin-bottom: 10px;
@@ -86,12 +98,12 @@
   text-align: center; /* Center text inside the button */
 }
 
-.options a:visited {
+.optionss a:visited {
   color: rgb(255, 255, 255); 
   
 }
 
-.options a:hover {
+.optionss a:hover {
   background-color: #137e00;
 }
 
